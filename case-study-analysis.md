@@ -1,5 +1,6 @@
 # AI Agent Implementation Strategy for AutoParts Inc.
 n8n acess link - https://china6870b.app.n8n.cloud/workflow/xOgDrFXNt7ZNXkWE
+To access the simulation create an n8n account  first then click the link or download the json file in the repository then import it into your n8n workflow 
 
 ## Executive Summary
 
