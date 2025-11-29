@@ -1,0 +1,1063 @@
+{
+  "name": "AutoParts Inc - Complete AI Agent System",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "4668fe55-32fc-4046-baba-35f5429e18d1",
+      "name": "Start Complete System",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1344,
+        -224
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "brianmunene6870@gmail.com",
+        "toEmail": "schistchina2018@gmain.com",
+        "subject": "🚀 AI Agent System Started",
+        "options": {}
+      },
+      "id": "084facd8-85f8-4645-a735-bb0eb4d308ad",
+      "name": "Send System Start Notification",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [
+        -1120,
+        -224
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "xTsNUUIfZSt745s1",
+          "name": "SMTP account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const machines = [\n  { id: \"CNC-01\", baseVibration: 3.5, type: \"precision\" },\n  { id: \"CNC-02\", baseVibration: 4.0, type: \"precision\" },\n  { id: \"Laser-Cutter-01\", baseVibration: 2.8, type: \"cutting\" }\n];\n\nconst results = machines.map(machine => {\n  const vibration = (machine.baseVibration + Math.random() * 3).toFixed(2);\n  const temperature = (70 + Math.random() * 15).toFixed(1);\n  const operationalHours = Math.floor(1200 + Math.random() * 800);\n  \n  const healthScore = Math.max(0, 100 - \n    (parseFloat(vibration) - 3) * 10 - \n    (parseFloat(temperature) - 70) * 0.5 - \n    operationalHours / 50\n  ).toFixed(1);\n  \n  return {\n    json: {\n      machine_id: machine.id,\n      machine_type: machine.type,\n      vibration_level: parseFloat(vibration),\n      temperature: parseFloat(temperature),\n      operational_hours: operationalHours,\n      health_score: parseFloat(healthScore),\n      timestamp: new Date().toISOString(),\n      status: parseFloat(vibration) > 5.0 || parseFloat(healthScore) < 60 ? \"maintenance\" : \"operational\",\n      agent_phase: \"predictive_maintenance\"\n    }\n  };\n});\n\nreturn results;"
+      },
+      "id": "ee978105-ac77-4688-9be0-87f257962731",
+      "name": "1. Generate Machine Sensor Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -896,
+        -224
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": [
+            {
+              "name": "Maintenance Needed",
+              "conditions": [
+                {
+                  "id": "vibration_level",
+                  "leftValue": "={{ $json.vibration_level }}",
+                  "rightValue": "5",
+                  "operator": {
+                    "type": "number",
+                    "operation": "gt"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "247facbc-4f1f-472c-bccf-3930a7465302",
+      "name": "Check Maintenance Threshold",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -672,
+        -224
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1cw1Z75U2HTH6IBLpBSVazruSFoq8glz9iKygXqk-BSE",
+          "mode": "list",
+          "cachedResultName": "Predictive Maintenance Agent",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cw1Z75U2HTH6IBLpBSVazruSFoq8glz9iKygXqk-BSE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 299654953,
+          "mode": "list",
+          "cachedResultName": "updated machine status",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cw1Z75U2HTH6IBLpBSVazruSFoq8glz9iKygXqk-BSE/edit#gid=299654953"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "machine_id"
+          ],
+          "schema": [
+            {
+              "id": "machine_id",
+              "displayName": "machine_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "machine_type",
+              "displayName": "machine_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "vibration_level",
+              "displayName": "vibration_level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "temperature",
+              "displayName": "temperature",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "operational_hours",
+              "displayName": "operational_hours",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "health_score",
+              "displayName": "health_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "agent_phase",
+              "displayName": "agent_phase",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "82b64342-1cb9-4b8c-bafd-8ec1e905869f",
+      "name": "Update Machine Status",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        -224,
+        -320
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Mz4dzwSJRSeeJG4i",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "brianmunene6870@gmail.com",
+        "toEmail": "schistchina2018@gmail.com",
+        "subject": "🔧 Maintenance Alert - {{ $json.machine_id }}",
+        "options": {}
+      },
+      "id": "dd127621-0b84-4b0b-a452-7770a4eeb0cf",
+      "name": "Send Maintenance Alert",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        -128
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "xTsNUUIfZSt745s1",
+          "name": "SMTP account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1cw1Z75U2HTH6IBLpBSVazruSFoq8glz9iKygXqk-BSE",
+          "mode": "list",
+          "cachedResultName": "Predictive Maintenance Agent",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cw1Z75U2HTH6IBLpBSVazruSFoq8glz9iKygXqk-BSE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 728550072,
+          "mode": "list",
+          "cachedResultName": "maintenance_log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cw1Z75U2HTH6IBLpBSVazruSFoq8glz9iKygXqk-BSE/edit#gid=728550072"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "786bd4fe-88b1-4d6b-9c69-8ee6e33ac14f",
+      "name": "Create Maintenance Ticket",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        -224,
+        -128
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Mz4dzwSJRSeeJG4i",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "console.log(`Machine ${$json.machine_id} operating normally`);\nreturn items;"
+      },
+      "id": "516b61d2-13af-4d66-a3f8-b3743f3cea80",
+      "name": "Log Normal Operation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// This node triggers the Quality Control Agent after Predictive Maintenance completes\nconst parts = [];\nconst defectTypes = ['crack', 'scratch', 'dimensional', 'surface', 'none'];\nconst machines = ['CNC-01', 'CNC-02', 'Laser-Cutter-01'];\n\nconst partCount = 8;\n\nfor (let i = 0; i < partCount; i++) {\n  const hasDefect = Math.random() < 0.15;\n  const defectType = hasDefect ? defectTypes[Math.floor(Math.random() * 4)] : 'none';\n  const severity = hasDefect ? ['low', 'medium', 'high'][Math.floor(Math.random() * 3)] : 'none';\n  const machineId = machines[Math.floor(Math.random() * machines.length)];\n  \n  parts.push({\n    json: {\n      inspection_id: `INSP-${Date.now()}-${i}`,\n      part_id: `PART-${Date.now()}-${i}`,\n      machine_id: machineId,\n      defect_type: defectType,\n      severity: severity,\n      timestamp: new Date().toISOString(),\n      action_taken: hasDefect ? 'REJECTED' : 'PASSED',\n      batch_number: `BATCH-${Math.floor(Date.now() / 1000)}`,\n      agent_phase: \"quality_control\"\n    }\n  });\n}\n\nreturn parts;"
+      },
+      "id": "8b122a21-387f-485f-b201-be51e96af6f1",
+      "name": "2. Generate Quality Inspection Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -224
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": [
+            {
+              "name": "Defect Detected",
+              "conditions": [
+                {
+                  "id": "defect_type",
+                  "leftValue": "={{ $json.defect_type }}",
+                  "rightValue": "none",
+                  "operator": {
+                    "type": "string",
+                    "operation": "notEqual"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d6fa3785-725a-44c5-a375-b7cb46bf72b2",
+      "name": "Check for Defects",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        224,
+        -224
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1cw1Z75U2HTH6IBLpBSVazruSFoq8glz9iKygXqk-BSE",
+          "mode": "list",
+          "cachedResultName": "Predictive Maintenance Agent",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cw1Z75U2HTH6IBLpBSVazruSFoq8glz9iKygXqk-BSE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 170134526,
+          "mode": "list",
+          "cachedResultName": "Quality_Inspections",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cw1Z75U2HTH6IBLpBSVazruSFoq8glz9iKygXqk-BSE/edit#gid=170134526"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "21415fa1-1de6-480f-bcaf-9c91882ea1a8",
+      "name": "Log Quality Inspections",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        448,
+        -416
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Mz4dzwSJRSeeJG4i",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "brianmunene6870@gmail.com",
+        "toEmail": "schistchina2018@gmail.com",
+        "subject": "🔍 Quality Alert - Defect Detected",
+        "options": {}
+      },
+      "id": "2a71342f-ef85-4a78-9fd7-ce1a3421390c",
+      "name": "Send Quality Alert",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [
+        448,
+        -224
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "xTsNUUIfZSt745s1",
+          "name": "SMTP account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const defectCount = items.filter(item => item.json.defect_type !== 'none').length;\nconst totalParts = items.length;\nconst defectRate = ((defectCount / totalParts) * 100).toFixed(2);\n\nconsole.log(`Quality Metrics - Defect Rate: ${defectRate}%`);\n\nreturn items;"
+      },
+      "id": "34803b1e-11d1-4c8a-bce4-3fa96780bd6a",
+      "name": "Calculate Quality Metrics",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        -32
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// This node triggers the Production Planning Agent after Quality Control completes\nconst orders = [\n  {\n    order_id: `ORDER-${Date.now()}-1`,\n    customer: \"AutoMaker Corp\",\n    product: \"Custom Bracket V2\",\n    quantity: 150,\n    priority: \"high\"\n  },\n  {\n    order_id: `ORDER-${Date.now()}-2`,\n    customer: \"EV Motors Inc\",\n    product: \"Motor Housing\", \n    quantity: 75,\n    priority: \"medium\"\n  },\n  {\n    order_id: `ORDER-${Date.now()}-3`,\n    customer: \"Classic Cars Ltd\",\n    product: \"Vintage Bushing\",\n    quantity: 25,\n    priority: \"low\"\n  }\n];\n\nreturn orders.map(order => ({\n  json: {\n    ...order,\n    timestamp: new Date().toISOString(),\n    status: \"pending\",\n    agent_phase: \"production_planning\"\n  }\n}));"
+      },
+      "id": "e87ccd5e-02f5-4d9f-b26e-8edf579d16dc",
+      "name": "3. Generate Custom Orders",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        -416
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1cw1Z75U2HTH6IBLpBSVazruSFoq8glz9iKygXqk-BSE",
+          "mode": "list",
+          "cachedResultName": "Predictive Maintenance Agent",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cw1Z75U2HTH6IBLpBSVazruSFoq8glz9iKygXqk-BSE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 299654953,
+          "mode": "list",
+          "cachedResultName": "updated machine status",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cw1Z75U2HTH6IBLpBSVazruSFoq8glz9iKygXqk-BSE/edit#gid=299654953"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "machine_id",
+              "displayName": "machine_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "machine_type",
+              "displayName": "machine_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "vibration_level",
+              "displayName": "vibration_level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "temperature",
+              "displayName": "temperature",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "operational_hours",
+              "displayName": "operational_hours",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "health_score",
+              "displayName": "health_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "agent_phase",
+              "displayName": "agent_phase",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "685e0894-9cd2-4914-8578-919cbeec5b47",
+      "name": "Read Current Machine Status",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        832,
+        272
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Mz4dzwSJRSeeJG4i",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get machine data from Google Sheets - BUG FIXED VERSION\nconst machineInput = $input.all().find(item => item.json && (item.json.Machine_ID || item.json.Machine_ID === ''));\n\nlet machineData = [];\n\n// Handle Google Sheets data structure - IMPROVED PARSING\nif (machineInput && machineInput.json) {\n  console.log('📊 Raw machine data received:', JSON.stringify(machineInput.json, null, 2));\n  \n  // Google Sheets returns different structures - handle all cases\n  if (Array.isArray(machineInput.json)) {\n    // Case 1: Array of machine objects\n    machineData = machineInput.json.filter(machine => \n      machine && machine.Machine_ID && machine.Machine_ID.trim() !== ''\n    );\n  } else if (machineInput.json.Machine_ID) {\n    // Case 2: Single machine object\n    machineData = [machineInput.json];\n  } else if (typeof machineInput.json === 'object') {\n    // Case 3: Object with machine data properties\n    // Check if this is a row from Google Sheets with machine data\n    const hasMachineData = machineInput.json.Machine_ID || \n                          machineInput.json.Status || \n                          machineInput.json.Health_Score;\n    \n    if (hasMachineData) {\n      machineData = [machineInput.json];\n    }\n  }\n}\n\nconsole.log(`🔧 Processed ${machineData.length} machines for scheduling`);\n\n// Get order data - IMPROVED ORDER HANDLING\nlet orders = [];\nconst orderInputs = $input.all().filter(item => item.json && item.json.order_id);\n\nif (orderInputs.length > 0) {\n  orders = orderInputs.map(item => item.json);\n  console.log(`📦 Processing ${orders.length} orders for scheduling`);\n} else {\n  // If no orders input, create a default order\n  console.log('⚠️ No orders found, creating default order');\n  orders = [{\n    order_id: `ORDER-${Date.now()}-DEFAULT`,\n    customer: \"Default Customer\",\n    product: \"Default Product\", \n    quantity: 100,\n    priority: \"medium\",\n    status: \"pending\",\n    customer_email: \"default@customer.com\",\n    due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]\n  }];\n}\n\nconst scheduledOrders = [];\n\n// Machine assignment logic - IMPROVED WITH FALLBACKS\nfor (let order of orders) {\n  let scheduledOrder = { ...order };\n  \n  console.log(`🔄 Scheduling order: ${order.order_id} for ${order.quantity} units`);\n  \n  // Safe filtering of machine data - ENHANCED VALIDATION\n  const availableMachines = machineData.filter(machine => {\n    if (!machine || !machine.Machine_ID) {\n      console.log('❌ Skipping invalid machine:', machine);\n      return false;\n    }\n    \n    // Extract and validate machine properties with fallbacks\n    const status = String(machine.Status || machine.status || '').toLowerCase().trim();\n    const healthScore = parseFloat(machine.Health_Score || machine.health_score || 0);\n    const machineId = machine.Machine_ID || machine.machine_id || 'Unknown';\n    \n    // Debug logging\n    console.log(`🔍 Checking machine ${machineId}: Status=${status}, Health=${healthScore}`);\n    \n    // Availability criteria\n    const isOperational = status === 'operational';\n    const isHealthy = healthScore > 70;\n    const isAvailable = isOperational && isHealthy;\n    \n    if (isAvailable) {\n      console.log(`✅ Machine ${machineId} is available`);\n    } else {\n      console.log(`❌ Machine ${machineId} not available - Status: ${status}, Health: ${healthScore}`);\n    }\n    \n    return isAvailable;\n  });\n\n  console.log(`🏭 Found ${availableMachines.length} available machines for order ${order.order_id}`);\n\n  if (availableMachines.length > 0) {\n    // Assign to first available machine - could be enhanced with load balancing\n    const assignedMachine = availableMachines[0];\n    const machineId = assignedMachine.Machine_ID || assignedMachine.machine_id || 'CNC-01';\n    \n    const startTime = new Date();\n    \n    // Calculate production time based on quantity and machine type\n    const baseProductionRate = 50; // units per hour\n    const productionHours = Math.max(1, order.quantity / baseProductionRate); // Minimum 1 hour\n    const endTime = new Date(startTime.getTime() + productionHours * 60 * 60 * 1000);\n    \n    // Calculate delivery date (production time + buffer)\n    const deliveryBufferDays = 1;\n    const deliveryDate = new Date(endTime.getTime() + deliveryBufferDays * 24 * 60 * 60 * 1000);\n    \n    scheduledOrder.status = 'scheduled';\n    scheduledOrder.assigned_machine = machineId;\n    scheduledOrder.start_time = startTime.toISOString();\n    scheduledOrder.end_time = endTime.toISOString();\n    scheduledOrder.delivery_date = deliveryDate.toISOString().split('T')[0];\n    scheduledOrder.production_hours = productionHours.toFixed(2);\n    scheduledOrder.production_notes = `Optimally scheduled by AI Production Planning Agent. Production time: ${productionHours.toFixed(2)} hours.`;\n    \n    console.log(`✅ Order ${order.order_id} scheduled on machine ${machineId}`);\n    \n  } else {\n    // No available machines - mark as delayed\n    scheduledOrder.status = 'delayed';\n    scheduledOrder.assigned_machine = 'None';\n    scheduledOrder.delay_reason = 'No available machines meeting health criteria';\n    scheduledOrder.estimated_delay = '2-3 days';\n    scheduledOrder.production_notes = 'Awaiting machine maintenance completion or resource allocation';\n    scheduledOrder.start_time = null;\n    scheduledOrder.end_time = null;\n    scheduledOrder.delivery_date = null;\n    \n    console.log(`⚠️ Order ${order.order_id} delayed - no available machines`);\n  }\n  \n  // Add scheduling metadata\n  scheduledOrder.scheduled_at = new Date().toISOString();\n  scheduledOrder.scheduling_agent = 'AI Production Planning Agent';\n  \n  scheduledOrders.push({\n    json: scheduledOrder\n  });\n}\n\nconsole.log(`🎯 Production Planning Complete: ${scheduledOrders.filter(order => order.json.status === 'scheduled').length} scheduled, ${scheduledOrders.filter(order => order.json.status === 'delayed').length} delayed`);\n\nreturn scheduledOrders;"
+      },
+      "id": "82794376-2790-44be-876f-3a4e272b4fad",
+      "name": "Optimize Production Schedule",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        -32
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1cw1Z75U2HTH6IBLpBSVazruSFoq8glz9iKygXqk-BSE",
+          "mode": "list",
+          "cachedResultName": "Predictive Maintenance Agent",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cw1Z75U2HTH6IBLpBSVazruSFoq8glz9iKygXqk-BSE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1121763073,
+          "mode": "list",
+          "cachedResultName": "Production_Schedule",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cw1Z75U2HTH6IBLpBSVazruSFoq8glz9iKygXqk-BSE/edit#gid=1121763073"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "order_id",
+              "displayName": "order_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer",
+              "displayName": "customer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "product",
+              "displayName": "product",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "quantity",
+              "displayName": "quantity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "agent_phase",
+              "displayName": "agent_phase",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "assigned_machine",
+              "displayName": "assigned_machine",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "delay_reason",
+              "displayName": "delay_reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "estimated_delay",
+              "displayName": "estimated_delay",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "production_notes",
+              "displayName": "production_notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "start_time",
+              "displayName": "start_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "end_time",
+              "displayName": "end_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "delivery_date",
+              "displayName": "delivery_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "scheduled_at",
+              "displayName": "scheduled_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "scheduling_agent",
+              "displayName": "scheduling_agent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "7a4e6cc8-7dd4-4337-8110-b8169282ba18",
+      "name": "Update Production Schedule",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        1120,
+        -32
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Mz4dzwSJRSeeJG4i",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "brianmunene6870@gmail.com",
+        "toEmail": "schistchina2018@gmail.com",
+        "subject": "📦 Order Confirmed - {{ $json.order_id }}",
+        "options": {}
+      },
+      "id": "a2095266-fc04-4d65-b0a0-2f7b60b3c225",
+      "name": "Send Customer Notification",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [
+        1344,
+        -32
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "xTsNUUIfZSt745s1",
+          "name": "SMTP account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "brianmunene6870@gmail.com",
+        "toEmail": "schistchina2018@gmail.com",
+        "subject": "✅ AI Agent System Completed Successfully",
+        "options": {}
+      },
+      "id": "7ea8e8ac-5c48-4131-a461-6601d6c752a9",
+      "name": "Send System Complete Notification",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [
+        1568,
+        -32
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "xTsNUUIfZSt745s1",
+          "name": "SMTP account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Start Complete System": {
+      "main": [
+        [
+          {
+            "node": "Send System Start Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send System Start Notification": {
+      "main": [
+        [
+          {
+            "node": "1. Generate Machine Sensor Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1. Generate Machine Sensor Data": {
+      "main": [
+        [
+          {
+            "node": "Check Maintenance Threshold",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Maintenance Threshold": {
+      "main": [
+        [
+          {
+            "node": "Update Machine Status",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Maintenance Alert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Normal Operation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Maintenance Alert": {
+      "main": [
+        [
+          {
+            "node": "Create Maintenance Ticket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Machine Status": {
+      "main": [
+        [
+          {
+            "node": "2. Generate Quality Inspection Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Normal Operation": {
+      "main": [
+        [
+          {
+            "node": "2. Generate Quality Inspection Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Maintenance Ticket": {
+      "main": [
+        [
+          {
+            "node": "2. Generate Quality Inspection Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. Generate Quality Inspection Data": {
+      "main": [
+        [
+          {
+            "node": "Check for Defects",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for Defects": {
+      "main": [
+        [
+          {
+            "node": "Log Quality Inspections",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Quality Alert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Quality Inspections",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Calculate Quality Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Quality Inspections": {
+      "main": [
+        [
+          {
+            "node": "3. Generate Custom Orders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Quality Alert": {
+      "main": [
+        [
+          {
+            "node": "3. Generate Custom Orders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Quality Metrics": {
+      "main": [
+        [
+          {
+            "node": "3. Generate Custom Orders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3. Generate Custom Orders": {
+      "main": [
+        [
+          {
+            "node": "Optimize Production Schedule",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Current Machine Status": {
+      "main": [
+        [
+          {
+            "node": "Optimize Production Schedule",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Optimize Production Schedule": {
+      "main": [
+        [
+          {
+            "node": "Update Production Schedule",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Production Schedule": {
+      "main": [
+        [
+          {
+            "node": "Send Customer Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Customer Notification": {
+      "main": [
+        [
+          {
+            "node": "Send System Complete Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a85bd961-3114-44c2-bc4e-2a06d170c806",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "15d232bbd46eb97e47d21ee01c5e00a0aa18e28d87bbc12ac8d6cffe6c049d9e"
+  },
+  "id": "xOgDrFXNt7ZNXkWE",
+  "tags": []
+}
